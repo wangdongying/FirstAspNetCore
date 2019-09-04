@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspNetCoreTodo.Services;
+using AspNetCoreTodo.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreTodo
 {
@@ -34,8 +36,14 @@ namespace AspNetCoreTodo
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //这一行告知 ASP.NET Core，在任何时候，只要 ITodoItemService 被一个构造函数（或其它什么地方）被请求，就用这个 FakeTodoItemService的实现。AddSingleton 把你的服务作为 singleton 添加进服务容器。这意味着，只有一个FakeTodoItemService的实例被创建，并在每次被请求的时候都被复用
-            services.AddSingleton<ITodoItemService, FakeTodoItemService>();
+            //这一行告知 ASP.NET Core，在任何时候，只要 ITodoItemService 被一个构造函数（或其它什么地方）被请求，就用这个 FakeTodoItemService的实现。AddSingleton 把你的服务作为 singleton 添加进服务容器。这意味着，只有一个FakeTodoItemService的实例被创建，并在每次被请求的时候都被复用。在后面，当你写另一个服务去跟数据库交互时，你会采用一个不同的方式（叫做 scoped）。我会在 运用数据库 一章里说明原因
+            //services.AddSingleton<ITodoItemService, FakeTodoItemService>();//注册为Singleton
+            services.AddScoped<ITodoItemService, TodoItemService>();//注册为Scoped
+
+            //指定连接字符串
+            services.AddDbContext<ApplicationDbContext>(options=> {
+                options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionStrings"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
