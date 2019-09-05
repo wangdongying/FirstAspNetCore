@@ -20,13 +20,17 @@
                 <td>Due</td>
             </tr>
         </thead>
-        @if (Model != null && Model.Items!=null)
+        @if (Model != null && Model.Items != null)
         {
             @foreach (var item in Model.Items)
             {
                 <tr>
                     <td>
-                        <input type="checkbox" class="done-checkbox">
+                        @*<input type="checkbox" class="done-checkbox">*@
+                        <form asp-action="MarkDone" method="post">
+                            <input type="checkbox" class="done-checkbox">
+                            <input type="hidden" name="id" value="@item.Id" />
+                        </form>
                     </td>
                     <td>@item.Title</td>
                     <td>@item.DueAt.Humanize()</td>
@@ -39,7 +43,7 @@
 
     <div class="panel-footer add-item-form">
         <!-- TODO: Add item form -->
-        @await Html.PartialAsync("AddItemPartial",new TodoItem())
+        @await Html.PartialAsync("AddItemPartial", new TodoItem())
     </div>
 </div>
 <style type="text/css">
@@ -52,3 +56,25 @@
         color: #888;
     }
 </style>
+<link href="~/lib/jquery-ui-1.12.1/Content/themes/base/datepicker.css" rel="stylesheet" />
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // Wire up all of the checkboxes to run markCompleted()
+            $('.done-checkbox').on('click', function (e) {
+                markCompleted(e.target);
+            });
+        });
+
+        function markCompleted(checkbox) {
+            checkbox.disabled = true;
+
+            var row = checkbox.closest('tr');
+            $(row).addClass('done');
+
+            var form = checkbox.closest('form');
+            form.submit();
+        }
+    </script>
+}
