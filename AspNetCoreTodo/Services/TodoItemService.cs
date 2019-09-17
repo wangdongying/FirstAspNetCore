@@ -11,7 +11,7 @@ namespace AspNetCoreTodo.Services
     public class TodoItemService : ITodoItemService
     {
         private readonly ApplicationDbContext _applicationDbContext;
-
+        //你应该注意到相同的依赖注入模式，如你在 MVC基础 章节所见到的那样，只是这次被注入的服务是 ApplicationDbContext。ApplicationDbContext 已经在ConfigureServices 方法里被添加到服务容器里，所以在这里可以直接使用。
         public TodoItemService(ApplicationDbContext applicationDbContext)
         {
             this._applicationDbContext = applicationDbContext;
