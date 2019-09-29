@@ -6,7 +6,7 @@ using AspNetCoreTodo.Models;
 
 namespace AspNetCoreTodo.Services
 {
-    public class FakeTodoItemService : ITodoItemService
+    public class FakeTodoItemService //: ITodoItemService
     {
         public Task<bool> AddItemAsync(TodoItem todoItem)
         {
@@ -29,6 +29,11 @@ namespace AspNetCoreTodo.Services
             
             return Task.FromResult(new[] { item1, item2 });
 
+        }
+
+        public Task<bool> MarkDoneAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
     //public class FakeTodoItemService_one : ITodoItemService

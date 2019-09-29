@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using AspNetCoreTodo.Services;
 using AspNetCoreTodo.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using AspNetCoreTodo.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AspNetCoreTodo
 {
@@ -44,6 +47,17 @@ namespace AspNetCoreTodo
             services.AddDbContext<ApplicationDbContext>(options=> {
                 options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionStrings"));
             });
+            //验证相关--确保是已经登录了的用户
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+         options =>
+         {
+             options.LoginPath = new PathString("/Home/Index");
+             //options.AccessDeniedPath = new PathString("/Todo/Index");
+         });
+            //身份，不同身份具有不同权限
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

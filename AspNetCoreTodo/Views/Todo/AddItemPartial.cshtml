@@ -6,8 +6,10 @@
 
 
 <form asp-action="AddItem" method="POST">
-    <label asp-for="Title">Add a new item:</label>
+    <label>Add a new item:</label>
+    <label asp-for="Title">Title</label>
     <input asp-for="Title">
-    <input asp-for="DueAt" class="datepicker">
+    <label asp-for="Title">Title</label>
+    <input asp-for="DueAt" class="datepicker" value="2019-09-14 17:02:36">
     <button type="submit">Add</button>
 </form>
